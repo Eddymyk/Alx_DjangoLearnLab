@@ -1,32 +1,11 @@
-# Import the Book model
-from bookshelf.models import Book
 
-# --------------------
-# CREATE
-# --------------------
-book = Book.objects.create(
-    title="1984",
-    author="George Orwell",
-    publication_year=1949
-)
-book  
+---
 
-# --------------------
-# RETRIEVE
-# --------------------
-Book.objects.all()  # Expected >
+## 5️⃣ `CRUD_operations.md`
 
-# --------------------
-# UPDATE
-# --------------------
-book = Book.objects.get(title="1984")
-book.title = "Nineteen Eighty-Four"
-book.save()
-book  
+```md
+# CRUD Operations for Book Model
 
-# --------------------
-# DELETE
-# --------------------
-book = Book.objects.get(title="Nineteen Eighty-Four")
-book.delete()
-Book.objects.all()  
+## Create
+```python
+book = Book.objects.create(title="1984", author="George Orwell", publication_year=1949)
