@@ -1,7 +1,10 @@
-<h2>Add Book</h2>
+<h1>Add a Book</h1>
 <form method="post">
     {% csrf_token %}
-    Title: <input type="text" name="title"><br>
-    Author: <input type="text" name="author"><br>
+    <label>Title:</label>
+    <input type="text" name="title" required><br>
+    <label>Author:</label>
+    <input type="text" name="author" required><br>
     <button type="submit">Add Book</button>
 </form>
+<a href="{% url 'list_books' %}">Back to books</a>
