@@ -1,9 +1,9 @@
-# relationship_app/urls.py
-
 from django.urls import path
 from django.views.generic import RedirectView
-from .views import list_books, LibraryDetailView, register
+from . import views  # import all views
 from django.contrib.auth.views import LoginView, LogoutView
+
+
 
 urlpatterns = [
     path("", RedirectView.as_view(url="/books/"), name="home"),
