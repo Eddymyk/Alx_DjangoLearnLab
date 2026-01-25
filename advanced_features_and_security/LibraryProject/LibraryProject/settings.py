@@ -10,6 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+
+# Security configurations:
+# DEBUG=False hides sensitive error details
+# CSRF and SESSION cookies are HTTPS-only
+# XSS and clickjacking protections enabled
+
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,7 +30,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-jdfi$wddt^mq7a08hae^idf!203oes0$1^b42_8^&jg&k#)npo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = "DENY"
+
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+SECURE_CSP_DEFAULT_SRC = "'self'"
+
+
 
 ALLOWED_HOSTS = []
 

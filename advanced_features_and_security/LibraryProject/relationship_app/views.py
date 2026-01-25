@@ -1,4 +1,9 @@
-# views.py
+# Views use Django ORM and forms to prevent SQL injection
+# permission_required ensures authorized access
+
+
+
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import UserCreationForm
