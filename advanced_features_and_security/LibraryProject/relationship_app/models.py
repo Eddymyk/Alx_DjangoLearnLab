@@ -1,3 +1,18 @@
+"""
+Permissions Setup:
+- can_view: Allows viewing book records
+- can_create: Allows creating new books
+- can_edit: Allows editing existing books
+- can_delete: Allows deleting books
+
+Groups:
+- Viewers: can_view
+- Editors: can_view, can_create, can_edit
+- Admins: all permissions
+"""
+
+
+
 from django.db import models
 from django.contrib.auth import get_user_model
 
