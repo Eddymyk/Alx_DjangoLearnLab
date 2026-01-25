@@ -32,15 +32,22 @@ SECRET_KEY = 'django-insecure-jdfi$wddt^mq7a08hae^idf!203oes0$1^b42_8^&jg&k#)npo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = "DENY"
+
+SECURE_SSL_REDIRECT = True 
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # include all subdomains
+SECURE_HSTS_PRELOAD = True  # allow browsers to preload HSTS
 
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = "DENY"
 SECURE_CSP_DEFAULT_SRC = "'self'"
+
+
 
 
 
