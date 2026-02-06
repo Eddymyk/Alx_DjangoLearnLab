@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import generics
+from rest_framework import generics, permissions, filters
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .models import Author, Book
 from .serializers import AuthorSerializer, BookSerializer
@@ -22,6 +22,12 @@ class BookListCreateAPIView(generics.ListCreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
+    # Enable search and ordering
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['title', 'author__name']
+    ordering_fields = ['title', 'publication_year']
+    ordering = ['title']
+
     def get_permissions(self):
         if self.request.method == 'POST':
             return [IsAuthenticated()]
@@ -38,9 +44,9 @@ class BookRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
         return [IsAuthenticatedOrReadOnly()]
 
 
-# ----------------
+# -----------------
 # Wrapper classes
-# ----------------
+# -----------------
 class ListView(BookListCreateAPIView):
     pass
 
