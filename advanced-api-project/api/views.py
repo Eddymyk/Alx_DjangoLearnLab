@@ -1,7 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, permissions, filters
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from django_filters import rest_framework
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, IsAuthenticated
 from .models import Author, Book
 from .serializers import AuthorSerializer, BookSerializer
 
@@ -23,7 +24,8 @@ class BookListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = BookSerializer
 
     # Enable search and ordering
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [rest_framework.DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['title', 'author__name', 'publication_year']
     search_fields = ['title', 'author__name']
     ordering_fields = ['title', 'publication_year']
     ordering = ['title']
