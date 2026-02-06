@@ -35,3 +35,22 @@ class BookRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
         if self.request.method in ['PUT', 'PATCH', 'DELETE']:
             return [permissions.IsAuthenticated()]
         return [permissions.AllowAny()]
+
+
+# ----------------
+# Wrapper classes
+# ----------------
+class ListView(BookListCreateAPIView):
+    pass
+
+class DetailView(BookRetrieveUpdateDestroyAPIView):
+    pass
+
+class CreateView(BookListCreateAPIView):
+    pass
+
+class UpdateView(BookRetrieveUpdateDestroyAPIView):
+    pass
+
+class DeleteView(BookRetrieveUpdateDestroyAPIView):
+    pass
