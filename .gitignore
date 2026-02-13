@@ -1,3 +1,4 @@
+
 # Python cache
 __pycache__/
 *.pyc
@@ -11,5 +12,26 @@ db.sqlite3
 # Python version file
 .python-version
 
+
 # uv package lock (if not needed)
 uv.lock
+=======
+# Python
+*.pyc
+__pycache__/
+
+# Virtual environment
+venv/
+
+# SQLite database (not needed)
+db.sqlite3
+
+# Django stuff
+*.log
+*.pot
+*.py[cod]
+
+# OS files
+.DS_Store
+Thumbs.db
+
