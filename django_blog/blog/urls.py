@@ -9,9 +9,11 @@ from .views import (
     login_view,
     logout_view,
     profile_view,
-    home
+    home,
+    add_comment,
+    edit_comment,
+    delete_comment
 )
-
 urlpatterns = [
     # Home page
     path('', home, name='home'),
@@ -22,6 +24,10 @@ urlpatterns = [
     path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
     path('post/<int:pk>/update/', PostUpdateView.as_view(), name='post-update'),
     path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post-delete'),
+
+    path('post/<int:post_id>/comments/new/', add_comment, name='comment-add'),
+    path('comment/<int:comment_id>/edit/', edit_comment, name='comment-edit'),
+    path('comment/<int:comment_id>/delete/', delete_comment, name='comment-delete'),
 
 
     # Authentication
