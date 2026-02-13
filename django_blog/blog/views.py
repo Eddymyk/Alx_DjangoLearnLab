@@ -9,6 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Post, Comment
 from .forms import CustomUserCreationForm, PostForm, CommentForm
 from django.db.models import Q
+from taggit.models import Tag
 
 # --------------------
 # Home & Authentication
@@ -145,17 +146,27 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 # --------------------
 # Search & Tags Views
 # --------------------
-def search_posts(request):
-    query = request.GET.get('q')
-    posts = Post.objects.none()
-    if query:
-        posts = Post.objects.filter(
-            Q(title__icontains=query) |
-            Q(content__icontains=query) |
-            Q(tags__name__icontains=query)
-        ).distinct()
-    return render(request, 'blog/search_results.html', {'posts': posts, 'query': query})
+    def search_posts(request):
+        query = request.GET.get('q')
+        posts = Post.objects.none()
+        if query:
+            posts = Post.objects.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(tags__name__icontains=query)
+            ).distinct()
+        return render(request, 'blog/search_results.html', {'posts': posts, 'query': query})
 
-def posts_by_tag(request, tag_name):
-    posts = Post.objects.filter(tags__name=tag_name)
-    return render(request, 'blog/posts_by_tag.html', {'posts': posts, 'tag': tag_name})
+    def posts_by_tag(request, tag_name):
+        posts = Post.objects.filter(tags__name=tag_name)
+        return render(request, 'blog/posts_by_tag.html', {'posts': posts, 'tag': tag_name})
+
+
+class PostByTagListView(ListView):
+    model = Post
+    template_name = 'blog/posts_by_tag.html'
+    context_object_name = 'posts'
+    
+    def get_queryset(self):
+        tag_slug = self.kwargs.get('tag_slug')
+        return Post.objects.filter(tags__slug=tag_slug).order_by('-published_date')

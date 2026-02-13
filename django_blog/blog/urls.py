@@ -12,6 +12,8 @@ from .views import (
     logout_view,
     profile_view,
     home,
+    PostByTagListView,
+    search_posts
 )
 urlpatterns = [
     # Home page
@@ -37,4 +39,10 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
     path('profile/', profile_view, name='profile'),
+
+     # Tag filtering
+    path('tags/<slug:tag_slug>/', PostByTagListView.as_view(), name='posts-by-tag'),
+
+    # Search
+    path('search/', search_posts, name='search'),
 ]
