@@ -123,7 +123,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        post_id = self.kwargs.get('post_id')
+        post_id = self.kwargs.get('pk')
         form.instance.post_id = post_id
         return super().form_valid(form)
 
