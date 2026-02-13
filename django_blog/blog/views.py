@@ -6,10 +6,9 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-
 from .models import Post, Comment
 from .forms import CustomUserCreationForm, PostForm, CommentForm
-
+from django.db.models import Q
 
 # --------------------
 # Home & Authentication
@@ -17,7 +16,6 @@ from .forms import CustomUserCreationForm, PostForm, CommentForm
 def home(request):
     posts = Post.objects.all().order_by('-published_date')
     return render(request, 'blog/home.html', {'posts': posts})
-
 
 def register_view(request):
     if request.method == "POST":
@@ -33,7 +31,6 @@ def register_view(request):
         form = CustomUserCreationForm()
     return render(request, "blog/register.html", {"form": form})
 
-
 def login_view(request):
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
@@ -48,12 +45,10 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, "blog/login.html", {"form": form})
 
-
 def logout_view(request):
     logout(request)
     messages.info(request, "You have been logged out.")
     return redirect("login")
-
 
 @login_required
 def profile_view(request):
@@ -66,7 +61,6 @@ def profile_view(request):
             messages.success(request, "Profile updated successfully!")
     return render(request, "blog/profile.html", {"user": user})
 
-
 # --------------------
 # Blog Post Views
 # --------------------
@@ -77,11 +71,9 @@ class PostListView(ListView):
     ordering = ['-published_date']
     paginate_by = 5
 
-
 class PostDetailView(DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
-
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
@@ -92,7 +84,6 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     form_class = PostForm
@@ -101,7 +92,6 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         post = self.get_object()
         return self.request.user == post.author
-
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
@@ -112,9 +102,8 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         post = self.get_object()
         return self.request.user == post.author
 
-
 # --------------------
-# Comment Views (Class-Based)
+# Comment Views
 # --------------------
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
@@ -130,7 +119,6 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return self.object.post.get_absolute_url()
 
-
 class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Comment
     form_class = CommentForm
@@ -143,7 +131,6 @@ class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_success_url(self):
         return self.object.post.get_absolute_url()
 
-
 class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Comment
     template_name = 'blog/comment_confirm_delete.html'
@@ -154,3 +141,21 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def get_success_url(self):
         return self.object.post.get_absolute_url()
+
+# --------------------
+# Search & Tags Views
+# --------------------
+def search_posts(request):
+    query = request.GET.get('q')
+    posts = Post.objects.none()
+    if query:
+        posts = Post.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct()
+    return render(request, 'blog/search_results.html', {'posts': posts, 'query': query})
+
+def posts_by_tag(request, tag_name):
+    posts = Post.objects.filter(tags__name=tag_name)
+    return render(request, 'blog/posts_by_tag.html', {'posts': posts, 'tag': tag_name})

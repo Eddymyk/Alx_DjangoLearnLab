@@ -26,6 +26,7 @@ class PostForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Post Title'}),
             'content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Write your content here...'}),
+            'tags': forms.TextInput(attrs={'placeholder': 'Add tags separated by commas'})
         }
 
 

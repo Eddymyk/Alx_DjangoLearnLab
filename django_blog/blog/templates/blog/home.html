@@ -6,9 +6,17 @@
     <title>My Django Blog</title>
     <link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
 </head>
+
 <body>
+
     <header>
         <h1>Welcome to My Django Blog</h1>
+
+        <!-- Search Form -->
+        <form method="get" action="{% url 'search' %}" class="search-form">
+            <input type="text" name="q" placeholder="Search..." required>
+            <button type="submit">Search</button>
+        </form>
     </header>
 
     <main>
@@ -16,9 +24,16 @@
             {% for post in posts %}
                 <li class="post">
                     <h2>{{ post.title }}</h2>
-                    <p class="author">by {{ post.author.username }} on {{ post.published_date }}</p>
-                    <p class="content">{{ post.content }}</p>
+
+                    <p class="author">
+                        by {{ post.author.username }} on {{ post.published_date }}
+                    </p>
+
+                    <p class="content">
+                        {{ post.content|truncatewords:40 }}
+                    </p>
                 </li>
+
             {% empty %}
                 <li>No posts yet.</li>
             {% endfor %}
@@ -26,5 +41,6 @@
     </main>
 
     <script src="{% static 'blog/js/main.js' %}"></script>
+
 </body>
 </html>
